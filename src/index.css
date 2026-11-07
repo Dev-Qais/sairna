@@ -21,7 +21,7 @@
   --shadow: 0 15px 55px rgba(19, 54, 72, 0.065);
   --shadow-md: 0 22px 60px rgba(19, 54, 72, 0.11);
   --radius: 22px;
-  --container: 1216px;
+  --container: 1356px;
   --font: "Cairo", "Segoe UI", Tahoma, sans-serif;
   --bg-hover: #078e87;
 }
@@ -64,4 +64,11 @@ body {
   min-width: min(var(--container), calc(100% - 68px));
   margin-inline: auto;
   padding-inline: 1.5rem;
+}
+
+@media (max-width: 650px) {
+  .container {
+    padding-inline: 1rem;
+    width: calc(100% - 34px);
+  }
 }

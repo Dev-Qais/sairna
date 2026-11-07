@@ -20,3 +20,15 @@ export const navigation = [
     path: "/tracking",
   },
 ];
+
+export const accountLinks = [
+  { label: "تسجيل الدخول", path: "/login" },
+  { label: "إنشاء حساب", path: "/register" },
+  { label: "حجوزاتي", path: "/my-bookings" },
+  { label: "الملف الشخصي", path: "/profile" },
+];
+
+export const supportLinks = [
+  { label: "عن سيرنا", path: "/about" },
+  { label: "مركز المساعدة", path: "/help" },
+];
