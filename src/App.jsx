@@ -1,8 +1,8 @@
+import AuthInitializer from "./components/auth/AuthInitializer";
 import AppRoute from "./routes/AppRoute";
-import { useThemeStore } from "./store/useThemeStore"
-import {useEffect} from "react"
+import { useThemeStore } from "./store/useThemeStore";
+import { useEffect } from "react";
 function App() {
-
   const { isDarkMode } = useThemeStore();
 
   useEffect(() => {
@@ -15,9 +15,11 @@ function App() {
 
   return (
     <div>
-      <AppRoute />
+      <AuthInitializer>
+        <AppRoute />
+      </AuthInitializer>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -39,12 +39,7 @@ function ToastProvider({ children }) {
       value={{ toasts, handleClose, success, error, info, warning }}
     >
       {children}
-      <button
-        onClick={() => success("اختبار ظهور الإشعارات")}
-        className="fixed bottom-5 left-5 z-[9999] bg-blue-600 text-white p-3 rounded-lg"
-      >
-        Test Toast
-      </button>
+
       {toasts.length > 0 && (
         <div className="fixed top-24 right-5 z-[100] flex flex-col gap-3">
           {toasts.map((toast) => (

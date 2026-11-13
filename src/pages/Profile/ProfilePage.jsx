@@ -1,7 +1,13 @@
-import React from "react";
+import AccountInfo from "./components/AccountInfo";
+import ProfileHero from "./components/ProfileHero";
 
 function ProfilePage() {
-  return <div>ProfilePage</div>;
+  return (
+    <div>
+      <ProfileHero />
+      <AccountInfo />
+    </div>
+  );
 }
 
 export default ProfilePage;

@@ -5,7 +5,7 @@ export const useAuthStore = create(
   persist(
     (set) => ({
       isAuthenticated: false,
-      isAuthLoading: false,
+      isAuthLoading: true,
       user: null,
       accessToken: null,
       tokenType: "Bearer",
@@ -18,6 +18,7 @@ export const useAuthStore = create(
           accessToken,
           tokenType,
         }),
+
       logout: () =>
         set({
           isAuthenticated: false,
@@ -26,10 +27,20 @@ export const useAuthStore = create(
           accessToken: null,
           tokenType: "Bearer",
         }),
+
       setAuthLoading: (isAuthLoading) => set({ isAuthLoading }),
+      setUser: (user) =>
+        set({ user, isAuthenticated: !!user, isAuthLoading: false }),
     }),
+
     {
       name: "auth-storage",
+
+      partialize: (state) => ({
+        user: state.user,
+        accessToken: state.accessToken,
+        tokenType: state.tokenType,
+      }),
     },
   ),
 );

@@ -37,7 +37,7 @@ function Header() {
     >
       <div className="container h-[83px] flex items-center justify-between gap-[22px]">
         <Logo
-          classNameStrong="text-[var(--dark-deep)]"
+          classNameStrong="text-[var(--text)]"
           classNameP="text-[var(--primary)]"
         />
         <nav className="items-center hidden lg:flex mx-auto">
@@ -134,7 +134,6 @@ function Header() {
                 )}
               </span>
               <p>
-                {user?.name || "الملف الشخصي"}
                 {user?.email} {user?.image}
                 <FaArrowDown size={15} className="ml-2 inline" />
               </p>
