@@ -5,12 +5,10 @@ import {
   Ticket,
   Bus,
   CalendarDays,
-  Clock3,
   MapPin,
   Armchair,
   Users,
   ArrowLeft,
-  ArrowRight,
   Route,
   X,
   CheckCircle2,
@@ -19,11 +17,12 @@ import {
   RefreshCw,
   LoaderCircle,
   Hash,
-  Phone,
   Info,
+  Ban,
 } from "lucide-react";
 
 import useMyBookings from "../../hooks/bookings/useMyBookings";
+import useCancelBooking from "../../hooks/bookings/useCancelBooking";
 
 const bookingStatus = {
   CONFIRMED: {
@@ -90,6 +89,27 @@ function BookingTicket({ booking, onClose }) {
   const trip = booking.trip;
   const seats = booking.seats || [];
 
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [cancelError, setCancelError] = useState("");
+
+  const { cancelBooking, isCancelling } = useCancelBooking();
+
+  const handleCancelBooking = async () => {
+    try {
+      setCancelError("");
+
+      await cancelBooking(booking.id);
+
+      onClose();
+    } catch (error) {
+      setCancelError(
+        error.response?.data?.message ||
+          error.message ||
+          "تعذر إلغاء الحجز، حاول مرة أخرى.",
+      );
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
@@ -139,9 +159,11 @@ function BookingTicket({ booking, onClose }) {
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
             <div>
               <span className="text-[10px] text-[var(--muted)]">الانطلاق</span>
+
               <h3 className="mt-1 text-lg font-black text-[var(--text)]">
                 {trip.origin?.name}
               </h3>
+
               <span className="text-xs text-[var(--primary)]">
                 {formatTime(trip.departureAt)}
               </span>
@@ -151,9 +173,11 @@ function BookingTicket({ booking, onClose }) {
 
             <div className="text-left">
               <span className="text-[10px] text-[var(--muted)]">الوصول</span>
+
               <h3 className="mt-1 text-lg font-black text-[var(--text)]">
                 {trip.destination?.name}
               </h3>
+
               <span className="text-xs text-[var(--primary)]">
                 {formatTime(trip.arrivalAt)}
               </span>
@@ -166,7 +190,7 @@ function BookingTicket({ booking, onClose }) {
             <div className="flex justify-between gap-3 text-xs">
               <span className="text-[var(--muted)]">الشركة</span>
               <strong className="text-[var(--text)]">
-                {trip.company?.name.slice(0, -8) || "غير محدد"}
+                {trip.company?.name?.slice(0, -8) || "غير محدد"}
               </strong>
             </div>
 
@@ -180,7 +204,7 @@ function BookingTicket({ booking, onClose }) {
             <div className="flex justify-between gap-3 text-xs">
               <span className="text-[var(--muted)]">المقاعد</span>
               <strong className="text-[var(--text)]">
-                {seats.map((seat) => seat.seatNumber).join("، ")}
+                {seats.map((seat) => seat.seatNumber).join("، ") || "—"}
               </strong>
             </div>
 
@@ -203,10 +227,68 @@ function BookingTicket({ booking, onClose }) {
 
         <div className="mt-4 flex items-center justify-between">
           <BookingStatus status={booking.status} />
+
           <span className="text-[10px] text-[var(--muted)]">
             {booking.code}
           </span>
         </div>
+
+        {/* Cancel Booking */}
+        {booking.status === "CONFIRMED" && (
+          <div className="mt-5 border-t border-[var(--border)] pt-4">
+            {!showCancelConfirm ? (
+              <button
+                type="button"
+                onClick={() => setShowCancelConfirm(true)}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-red-500/5 px-4 py-3 text-xs font-black text-red-500 transition hover:bg-red-500/10"
+              >
+                <Ban size={16} />
+                إلغاء الحجز
+              </button>
+            ) : (
+              <div className="space-y-3 rounded-xl border border-red-500/30 bg-red-500/5 p-4">
+                <p className="text-sm font-bold text-[var(--text)]">
+                  هل أنت متأكد من إلغاء هذا الحجز؟
+                </p>
+
+                <p className="text-xs text-[var(--muted)]">
+                  يرجى التأكد قبل تنفيذ عملية الإلغاء.
+                </p>
+
+                {cancelError && (
+                  <p className="text-xs text-red-500">{cancelError}</p>
+                )}
+
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCancelBooking}
+                    disabled={isCancelling}
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-red-500 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-red-600 disabled:opacity-50"
+                  >
+                    {isCancelling && (
+                      <LoaderCircle size={15} className="animate-spin" />
+                    )}
+
+                    {isCancelling ? "جارٍ الإلغاء..." : "تأكيد الإلغاء"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCancelConfirm(false);
+                      setCancelError("");
+                    }}
+                    disabled={isCancelling}
+                    className="rounded-lg border border-[var(--border)] px-4 py-2.5 text-xs font-bold text-[var(--text)] disabled:opacity-50"
+                  >
+                    تراجع
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -299,6 +381,7 @@ function BookingCard({ booking, onShowTicket, onTrack }) {
             <Hash size={12} />
             رقم الحجز
           </span>
+
           <strong className="mt-1 block text-[11px] font-black text-[var(--text)]">
             {booking.code}
           </strong>
@@ -309,6 +392,7 @@ function BookingCard({ booking, onShowTicket, onTrack }) {
             <CalendarDays size={12} />
             تاريخ الرحلة
           </span>
+
           <strong className="mt-1 block text-[11px] font-black text-[var(--text)]">
             {formatDate(trip.departureAt)}
           </strong>
@@ -319,6 +403,7 @@ function BookingCard({ booking, onShowTicket, onTrack }) {
             <Armchair size={12} />
             المقاعد
           </span>
+
           <strong className="mt-1 block text-[11px] font-black text-[var(--text)]">
             {seats.map((seat) => seat.seatNumber).join("، ") || "—"}
           </strong>
@@ -329,6 +414,7 @@ function BookingCard({ booking, onShowTicket, onTrack }) {
             <Users size={12} />
             عدد المسافرين
           </span>
+
           <strong className="mt-1 block text-[11px] font-black text-[var(--text)]">
             {seats.length}
           </strong>
@@ -352,6 +438,7 @@ function BookingCard({ booking, onShowTicket, onTrack }) {
           <span className="block text-[9px] text-[var(--muted)]">
             السعر الإجمالي
           </span>
+
           <strong className="mt-1 block text-sm font-black text-[var(--primary)]">
             {formatPrice(booking.totalPrice)} ل.س
           </strong>

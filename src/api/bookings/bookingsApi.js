@@ -32,3 +32,23 @@ export const getMyBookings = async () => {
 
   return response.data;
 };
+
+export const cancelMyBooking = async (bookingId) => {
+  const { accessToken, tokenType } = useAuthStore.getState();
+
+  if (!accessToken) {
+    throw new Error("يجب تسجيل الدخول أولاً.");
+  }
+
+  const response = await api.post(
+    `/bookings/${bookingId}/cancel`,
+    {},
+    {
+      headers: {
+        Authorization: `${tokenType || "Bearer"} ${accessToken}`,
+      },
+    },
+  );
+
+  return response.data;
+};
