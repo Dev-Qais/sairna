@@ -1,19 +1,102 @@
-# React + Vite
+# سيرنا (Sairna)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+سيرنا هو تطبيق ويب عربي لحجز الرحلات والتنقل بين المدن. يتيح للمستخدم البحث عن الرحلات المتاحة، اختيار المقعد، إتمام الحجز، ومتابعة الرحلة على الخريطة من خلال واجهة استخدام حديثة ومتجاوبة.
 
-Currently, two official plugins are available:
+## المزايا
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- البحث عن الرحلات حسب مدينة الانطلاق والوجهة والتاريخ.
+- عرض نتائج الرحلات مع إمكانية التصفية حسب شركات النقل.
+- اختيار المقاعد وإدخال بيانات المسافرين وإتمام الحجز.
+- إنشاء حساب وتسجيل الدخول وإدارة الملف الشخصي.
+- عرض الرحلات والحجوزات الخاصة بالمستخدم وإمكانية إلغائها.
+- تتبع الرحلة وموقعها على الخريطة.
+- استعراض شركات النقل والمدن والوجهات.
+- صفحات تعريفية عن سيرنا ومركز للمساعدة والأسئلة الشائعة.
+- دعم الوضع الداكن.
+- واجهة عربية باتجاه من اليمين إلى اليسار (RTL).
 
-## React Compiler
+## التقنيات المستخدمة
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **React 19** لبناء الواجهة.
+- **Vite** للتطوير وبناء المشروع.
+- **React Router** لإدارة المسارات.
+- **Tailwind CSS** لتنسيق الواجهة.
+- **Zustand** لإدارة الحالة.
+- **TanStack React Query** لإدارة بيانات الطلبات والتخزين المؤقت.
+- **Axios** للتواصل مع واجهة برمجة التطبيقات.
+- **React Leaflet وLeaflet** لخرائط وتتبع الرحلات.
+- **Framer Motion** للحركات والانتقالات.
+- **ESLint** لفحص جودة الشيفرة.
 
-Note: This will impact Vite dev & build performances.
-You can also try [the experimental native React Compiler support in plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md#rust-react-compiler) by using `compiler: true` in the plugin options instead of using the Babel plugin.
+## المتطلبات
 
-## Expanding the ESLint configuration
+- Node.js حديث.
+- npm.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## التشغيل محليًا
+
+ثبّت الاعتماديات:
+
+```bash
+npm install
+```
+
+شغّل خادم التطوير:
+
+```bash
+npm run dev
+```
+
+بعدها افتح الرابط الذي يعرضه Vite في الطرفية، وغالبًا يكون:
+
+```text
+http://localhost:5173
+```
+
+## الأوامر المتاحة
+
+```bash
+npm run dev      # تشغيل بيئة التطوير
+npm run build    # إنشاء نسخة الإنتاج
+npm run preview  # معاينة نسخة الإنتاج محليًا
+npm run lint     # فحص الشيفرة
+```
+
+## هيكل المشروع
+
+```text
+src/
+├── api/          # خدمات الاتصال بواجهة برمجة التطبيقات
+├── components/   # المكونات المشتركة ومكونات الواجهة
+├── hooks/        # Hooks الخاصة بالمصادقة والرحلات والحجوزات
+├── layouts/      # تخطيطات الصفحات
+├── pages/        # صفحات التطبيق
+├── routes/       # تعريف المسارات والحماية
+├── store/        # حالات التطبيق المشتركة
+└── utils/        # أدوات التحقق والمساعدات
+```
+
+## المسارات الرئيسية
+
+| المسار | الوصف |
+|---|---|
+| `/` | الصفحة الرئيسية والبحث عن الرحلات |
+| `/results` | نتائج البحث والحجز |
+| `/login` | تسجيل الدخول |
+| `/register` | إنشاء حساب |
+| `/profile` | الملف الشخصي |
+| `/trips` | الرحلات والحجوزات |
+| `/tracking` | تتبع الرحلة |
+| `/companies` | شركات النقل |
+| `/about` | نبذة عن سيرنا |
+| `/help` | الدعم والأسئلة الشائعة |
+
+## واجهة برمجة التطبيقات
+
+يتصل التطبيق بواجهة سيرنا الخلفية عبر Axios. عنوان الواجهة الحالي معرّف في:
+
+```text
+src/api/axios.js
+```
+
+تأكد من توفر الخدمة الخلفية عند اختبار الميزات التي تتطلب تسجيل الدخول أو جلب الرحلات والحجوزات.
