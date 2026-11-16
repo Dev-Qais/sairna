@@ -70,7 +70,7 @@ function ResultsSidebar({
                   onChange={() => onSelectCompany(company.id)}
                 />
 
-                <span className="text-xs">{company.name.slice(0, -8)}</span>
+                <span className="text-xs">{company.name}</span>
               </div>
 
               <span className="text-xs text-[var(--muted)]">
